@@ -1,135 +1,315 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Entrar - TechStore</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <header>
+```
+<header>
 
-        <h1>TechStore</h1>
+    <h1>TechStore</h1>
 
-        <nav aria-label="Navegação principal">
-            <a href="index.html">Início</a>
-            <a href="produtos.html">Produtos</a>
-            <a href="cadastro.html">Cadastro</a>
-            <a href="login.html">Entrar</a>
-        </nav>
+    <nav aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="produtos.html">Produtos</a>
+        <a href="cadastro.html">Cadastro</a>
+        <a href="login.html">Entrar</a>
+    </nav>
 
-    </header>
+</header>
 
-    <main>
+<main>
 
-        <section class="cadastro" aria-labelledby="titulo-login">
+    <section class="cadastro" aria-labelledby="titulo-login">
 
-            <h2 id="titulo-login">Entrar na sua conta</h2>
+        <h2 id="titulo-login">Entrar na sua conta</h2>
 
-            <p class="texto-cadastro">
-                Acesse sua conta TechStore.
-            </p>
-
-            <form id="formLogin">
-
-                <label for="email">E-mail:</label>
-
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Digite seu e-mail"
-                    required
-                >
-
-                <label for="senha">Senha:</label>
-
-                <input
-                    type="password"
-                    id="senha"
-                    name="senha"
-                    placeholder="Digite sua senha"
-                    required
-                >
-
-                <button type="submit">
-                    Entrar
-                </button>
-
-                <p id="mensagemLogin" class="mensagem" role="status"></p>
-
-            </form>
-
-            <p class="link-login">
-                Ainda não possui uma conta?
-                <a href="cadastro.html">Criar uma conta</a>
-            </p>
-
-        </section>
-
-    </main>
-
-    <footer>
-
-        <h2>TechStore</h2>
-
-        <p>
-            Peças, computadores e equipamentos de tecnologia.
+        <p class="texto-cadastro">
+            Acesse sua conta TechStore.
         </p>
 
-        <p>
-            Contato: contato@techstore.com
+        <form id="formLogin">
+
+            <label for="email">E-mail:</label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Digite seu e-mail"
+                required
+            >
+
+            <label for="senha">Senha:</label>
+
+            <input
+                type="password"
+                id="senha"
+                name="senha"
+                placeholder="Digite sua senha"
+                required
+            >
+
+            <button type="submit">
+                Entrar
+            </button>
+
+            <p id="mensagemLogin" class="mensagem" role="status"></p>
+
+        </form>
+
+        <p class="link-login">
+            <a href="#" onclick="abrirRecuperacao(event)">
+                Esqueci minha senha
+            </a>
         </p>
 
-        <p>
-            © 2026 TechStore - Todos os direitos reservados.
+        <p class="link-login">
+            Ainda não possui uma conta?
+            <a href="cadastro.html">Criar uma conta</a>
         </p>
 
-    </footer>
+    </section>
 
-    <script>
+</main>
 
-        const formulario = document.getElementById("formLogin");
-        const mensagem = document.getElementById("mensagemLogin");
+<footer>
 
-        formulario.addEventListener("submit", function(event) {
+    <h2>TechStore</h2>
 
-            event.preventDefault();
+    <p>
+        Peças, computadores e equipamentos de tecnologia.
+    </p>
 
-            const email = document.getElementById("email").value.trim().toLowerCase();
-            const senha = document.getElementById("senha").value;
+    <p>
+        Contato: contato@techstore.com
+    </p>
 
-            const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    <p>
+        © 2026 TechStore - Todos os direitos reservados.
+    </p>
 
-            const usuario = usuarios.find(function(usuario) {
+</footer>
+
+<div
+    id="recuperacaoSenha"
+    class="recuperacao"
+    role="dialog"
+    aria-labelledby="titulo-recuperacao"
+    aria-modal="true"
+>
+
+    <div class="recuperacao-caixa">
+
+        <h3 id="titulo-recuperacao">
+            Esqueci minha senha
+        </h3>
+
+        <p>
+            Digite o e-mail da sua conta e escolha uma nova senha.
+        </p>
+
+        <label for="emailRecuperacao">
+            E-mail:
+        </label>
+
+        <input
+            type="email"
+            id="emailRecuperacao"
+            placeholder="Digite seu e-mail"
+        >
+
+        <label for="novaSenha">
+            Nova senha:
+        </label>
+
+        <input
+            type="password"
+            id="novaSenha"
+            placeholder="Digite sua nova senha"
+        >
+
+        <div class="botoes-recuperacao">
+
+            <button
+                type="button"
+                onclick="fecharRecuperacao()"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                onclick="recuperarSenha()"
+            >
+                Alterar senha
+            </button>
+
+        </div>
+
+        <p
+            id="mensagemRecuperacao"
+            class="mensagem"
+            role="status"
+        ></p>
+
+    </div>
+
+</div>
+
+<script>
+
+    const formulario =
+        document.getElementById("formLogin");
+
+    const mensagem =
+        document.getElementById("mensagemLogin");
+
+    formulario.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim()
+                .toLowerCase();
+
+        const senha =
+            document.getElementById("senha").value;
+
+        const usuarios =
+            JSON.parse(localStorage.getItem("usuarios")) || [];
+
+        const usuario =
+            usuarios.find(function(usuario) {
                 return usuario.email === email;
             });
 
-            if (!usuario) {
-                mensagem.textContent = "Conta não encontrada. Verifique o e-mail.";
-                mensagem.className = "mensagem erro";
-                return;
-            }
+        if (!usuario) {
 
-            if (usuario.senha !== senha) {
-                mensagem.textContent = "Senha incorreta. Tente novamente.";
-                mensagem.className = "mensagem erro";
-                return;
-            }
+            mensagem.textContent =
+                "Conta não encontrada. Verifique o e-mail.";
 
-            mensagem.textContent = "Login realizado com sucesso!";
-            mensagem.className = "mensagem sucesso";
+            mensagem.className =
+                "mensagem erro";
 
-            formulario.reset();
+            return;
+        }
 
-        });
+        if (usuario.senha !== senha) {
 
-    </script>
+            mensagem.textContent =
+                "Senha incorreta. Tente novamente.";
+
+            mensagem.className =
+                "mensagem erro";
+
+            return;
+        }
+
+        mensagem.textContent =
+            "Login realizado com sucesso!";
+
+        mensagem.className =
+            "mensagem sucesso";
+
+        formulario.reset();
+
+    });
+
+    function abrirRecuperacao(event) {
+
+        event.preventDefault();
+
+        document
+            .getElementById("recuperacaoSenha")
+            .classList.add("mostrar");
+
+    }
+
+    function fecharRecuperacao() {
+
+        document
+            .getElementById("recuperacaoSenha")
+            .classList.remove("mostrar");
+
+        document.getElementById("emailRecuperacao").value = "";
+        document.getElementById("novaSenha").value = "";
+        document.getElementById("mensagemRecuperacao").textContent = "";
+
+    }
+
+    function recuperarSenha() {
+
+        const email =
+            document
+                .getElementById("emailRecuperacao")
+                .value
+                .trim()
+                .toLowerCase();
+
+        const novaSenha =
+            document.getElementById("novaSenha").value;
+
+        const mensagemRecuperacao =
+            document.getElementById("mensagemRecuperacao");
+
+        const usuarios =
+            JSON.parse(localStorage.getItem("usuarios")) || [];
+
+        const usuario =
+            usuarios.find(function(usuario) {
+                return usuario.email === email;
+            });
+
+        if (!usuario) {
+
+            mensagemRecuperacao.textContent =
+                "E-mail não encontrado.";
+
+            mensagemRecuperacao.className =
+                "mensagem erro";
+
+            return;
+        }
+
+        if (!novaSenha) {
+
+            mensagemRecuperacao.textContent =
+                "Digite uma nova senha.";
+
+            mensagemRecuperacao.className =
+                "mensagem erro";
+
+            return;
+        }
+
+        usuario.senha = novaSenha;
+
+        localStorage.setItem(
+            "usuarios",
+            JSON.stringify(usuarios)
+        );
+
+        mensagemRecuperacao.textContent =
+            "Senha alterada com sucesso!";
+
+        mensagemRecuperacao.className =
+            "mensagem sucesso";
+
+    }
+
+</script>
+```
 
 </body>
 
