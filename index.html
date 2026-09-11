@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TechStore - Tecnologia e Informática</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>TechStore</h1>
+
+        <nav aria-label="Navegação principal">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="#">Computadores</a>
+            <a href="#">Peças</a>
+            <a href="#">Contato</a>
+        </nav>
+
+        <form role="search">
+            <label for="pesquisa">Pesquisar produtos</label>
+
+            <input
+                type="search"
+                id="pesquisa"
+                name="pesquisa"
+                placeholder="Pesquisar..."
+            >
+
+            <button type="submit">
+                Pesquisar
+            </button>
+
+        </form>
+
+    </header>
+
+    <main>
+
+        <section class="hero" aria-labelledby="titulo-principal">
+
+            <h2 id="titulo-principal">
+                Tecnologia para todos os momentos
+            </h2>
+
+            <p>
+                Encontre peças, computadores e equipamentos
+                novos e seminovos em um só lugar.
+            </p>
+
+            <a href="produtos.html" class="btn">
+                Ver produtos
+            </a>
+
+            <a href="cadastro.html" class="btn">
+                Cadastre-se
+            </a>
+
+        </section>
+
+        <section class="produtos" aria-labelledby="produtos-destaque">
+
+            <h2 id="produtos-destaque">
+                Produtos em destaque
+            </h2>
+
+            <div class="cards">
+
+                <article class="card">
+
+                    <img
+                        src="imagens/pc-gamer.jpg"
+                        alt="Computador Gamer com iluminação colorida"
+                    >
+
+                    <h3>Computador Gamer</h3>
+
+                    <p>
+                        PC Gamer completo para jogos e estudos.
+                    </p>
+
+                    <strong>R$ 3.499,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        onclick="comprar()"
+                    >
+                        Comprar
+                    </button>
+
+                </article>
+
+                <article class="card">
+
+                    <img
+                        src="imagens/placa-video.jpg"
+                        alt="Placa de vídeo RTX 3050"
+                    >
+
+                    <h3>Placa de Vídeo RTX 3050</h3>
+
+                    <p>
+                        Placa de vídeo para melhorar o desempenho.
+                    </p>
+
+                    <strong>R$ 1.299,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        onclick="comprar()"
+                    >
+                        Comprar
+                    </button>
+
+                </article>
+
+                <article class="card">
+
+                    <img
+                        src="imagens/note.webp"
+                        alt="Notebook para estudos e trabalho"
+                    >
+
+                    <h3>Notebook</h3>
+
+                    <p>
+                        Notebook para estudos, trabalho e lazer.
+                    </p>
+
+                    <strong>R$ 2.799,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        onclick="comprar()"
+                    >
+                        Comprar
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <h2>TechStore</h2>
+
+        <p>
+            Peças, computadores e equipamentos de tecnologia.
+        </p>
+
+        <p>
+            Contato: contato@techstore.com
+        </p>
+
+        <p>
+            © 2026 TechStore - Todos os direitos reservados.
+        </p>
+
+    </footer>
+
+    <div
+        id="notificacao"
+        class="notificacao"
+        role="status"
+        aria-live="polite"
+    >
+        Produto adicionado ao carrinho!
+    </div>
+
+    <script>
+
+        function comprar() {
+
+            const notificacao = document.getElementById("notificacao");
+
+            notificacao.classList.add("mostrar");
+
+            setTimeout(function() {
+                notificacao.classList.remove("mostrar");
+            }, 2500);
+
+        }
+
+    </script>
+
+</body>
+
+</html>

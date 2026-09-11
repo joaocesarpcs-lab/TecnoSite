@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro - TechStore</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>TechStore</h1>
+
+        <nav aria-label="Navegação principal">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="cadastro.html">Cadastro</a>
+            <a href="login.html">Entrar</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section class="cadastro" aria-labelledby="titulo-cadastro">
+
+            <h2 id="titulo-cadastro">Crie sua conta</h2>
+
+            <p class="texto-cadastro">
+                Cadastre-se para ter acesso à TechStore.
+            </p>
+
+            <form id="formCadastro">
+
+                <label for="nome">Nome completo:</label>
+
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite seu nome"
+                    required
+                >
+
+                <label for="email">E-mail:</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Digite seu e-mail"
+                    required
+                >
+
+                <label for="senha">Senha:</label>
+
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    placeholder="Digite sua senha"
+                    required
+                >
+
+                <label for="confirmar-senha">Confirmar senha:</label>
+
+                <input
+                    type="password"
+                    id="confirmar-senha"
+                    name="confirmar-senha"
+                    placeholder="Digite a senha novamente"
+                    required
+                >
+
+                <button type="submit">
+                    Cadastrar
+                </button>
+
+                <p id="mensagemCadastro" class="mensagem" role="status"></p>
+
+            </form>
+
+            <p class="link-login">
+                Já possui uma conta?
+                <a href="login.html">Entrar na sua conta</a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <h2>TechStore</h2>
+
+        <p>
+            Peças, computadores e equipamentos de tecnologia.
+        </p>
+
+        <p>
+            Contato: contato@techstore.com
+        </p>
+
+        <p>
+            © 2026 TechStore - Todos os direitos reservados.
+        </p>
+
+    </footer>
+
+    <script>
+
+        const formulario = document.getElementById("formCadastro");
+        const mensagem = document.getElementById("mensagemCadastro");
+
+        formulario.addEventListener("submit", function(event) {
+
+            event.preventDefault();
+
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim().toLowerCase();
+            const senha = document.getElementById("senha").value;
+            const confirmarSenha = document.getElementById("confirmar-senha").value;
+
+            let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+            const emailExiste = usuarios.some(function(usuario) {
+                return usuario.email === email;
+            });
+
+            if (emailExiste) {
+                mensagem.textContent = "Este e-mail já está em uso!";
+                mensagem.className = "mensagem erro";
+                return;
+            }
+
+            if (senha !== confirmarSenha) {
+                mensagem.textContent = "As senhas não são iguais!";
+                mensagem.className = "mensagem erro";
+                return;
+            }
+
+            const novoUsuario = {
+                nome: nome,
+                email: email,
+                senha: senha
+            };
+
+            usuarios.push(novoUsuario);
+
+            localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+            mensagem.textContent = "Cadastro realizado com sucesso!";
+            mensagem.className = "mensagem sucesso";
+
+            formulario.reset();
+
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Produtos - TechStore</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>TechStore</h1>
+
+        <nav aria-label="Navegação principal">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="cadastro.html">Cadastro</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section class="produtos" aria-labelledby="titulo-produtos">
+
+            <h2 id="titulo-produtos">Nossos Produtos</h2>
+
+            <div class="cards">
+
+                <article class="card">
+
+                    <img
+                        src="imagens/pc-gamer.jpg"
+                        alt="Computador Gamer completo"
+                    >
+
+                    <h3>Computador Gamer</h3>
+
+                    <p>
+                        PC Gamer completo para jogos e estudos.
+                    </p>
+
+                    <strong>R$ 3.499,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        onclick="comprar()"
+                    >
+                        Comprar
+                    </button>
+
+                </article>
+
+                <article class="card">
+
+                    <img
+                        src="imagens/placa-video.jpg"
+                        alt="Placa de vídeo RTX 3050"
+                    >
+
+                    <h3>Placa de Vídeo RTX 3050</h3>
+
+                    <p>
+                        Placa de vídeo para melhorar o desempenho.
+                    </p>
+
+                    <strong>R$ 1.299,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        onclick="comprar()"
+                    >
+                        Comprar
+                    </button>
+
+                </article>
+
+                <article class="card">
+
+                    <img
+                        src="imagens/note.webp"
+                        alt="Notebook para estudos e trabalho"
+                    >
+
+                    <h3>Notebook</h3>
+
+                    <p>
+                        Notebook para estudos, trabalho e lazer.
+                    </p>
+
+                    <strong>R$ 2.799,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        onclick="comprar()"
+                    >
+                        Comprar
+                    </button>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <h2>TechStore</h2>
+
+        <p>
+            Peças, computadores e equipamentos de tecnologia.
+        </p>
+
+        <p>
+            Contato: contato@techstore.com
+        </p>
+
+        <p>
+            © 2026 TechStore - Todos os direitos reservados.
+        </p>
+
+    </footer>
+
+    <script>
+
+        function comprar() {
+            alert("Produto adicionado ao carrinho!");
+        }
+
+    </script>
+
+</body>
+
+</html>
