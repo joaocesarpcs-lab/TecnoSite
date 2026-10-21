@@ -1,316 +1,204 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar - TechStore</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+    <header>
+        <h1>TechStore</h1>
+        <nav aria-label="Navegação principal">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="cadastro.html">Cadastro</a>
+            <a href="login.html" aria-current="page">Entrar</a>
+            <a href="carrinho.html">Carrinho</a>
+        </nav>
+    </header>
 
-```
-<header>
+    <main>
+        <section class="cadastro" aria-labelledby="titulo-login">
+            <h2 id="titulo-login">Entrar na sua conta</h2>
+            <p class="texto-cadastro">Acesse sua conta TechStore.</p>
 
-    <h1>TechStore</h1>
+            <form id="formLogin">
+                <label for="email">E-mail:</label>
+                <input type="email" id="email" name="email"
+                    placeholder="Digite seu e-mail" autocomplete="email" required>
 
-    <nav aria-label="Navegação principal">
-        <a href="index.html">Início</a>
-        <a href="produtos.html">Produtos</a>
-        <a href="cadastro.html">Cadastro</a>
-        <a href="login.html">Entrar</a>
-    </nav>
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha"
+                    placeholder="Digite sua senha" autocomplete="current-password" required>
 
-</header>
+                <button type="submit">Entrar</button>
+                <p id="mensagemLogin" class="mensagem" role="status" aria-live="polite"></p>
+            </form>
 
-<main>
+            <p class="link-login">
+                <a href="#" id="linkRecuperacao">Esqueci minha senha</a>
+            </p>
+            <p class="link-login">
+                Ainda não possui uma conta?
+                <a href="cadastro.html">Criar uma conta</a>
+            </p>
+        </section>
+    </main>
 
-    <section class="cadastro" aria-labelledby="titulo-login">
+    <footer>
+        <h2>TechStore</h2>
+        <p>Peças, computadores e equipamentos de tecnologia.</p>
+        <p>Contato: <a href="mailto:contato@techstore.com">contato@techstore.com</a></p>
+        <p>© 2026 TechStore - Todos os direitos reservados.</p>
+    </footer>
 
-        <h2 id="titulo-login">Entrar na sua conta</h2>
+    <div id="recuperacaoSenha" class="recuperacao"
+        role="dialog" aria-labelledby="titulo-recuperacao"
+        aria-modal="true" aria-hidden="true">
 
-        <p class="texto-cadastro">
-            Acesse sua conta TechStore.
-        </p>
+        <div class="recuperacao-caixa">
+            <h3 id="titulo-recuperacao">Esqueci minha senha</h3>
+            <p>Digite o e-mail cadastrado e escolha uma nova senha.</p>
 
-        <form id="formLogin">
+            <form id="formRecuperacao">
+                <label for="emailRecuperacao">E-mail:</label>
+                <input type="email" id="emailRecuperacao"
+                    placeholder="Digite seu e-mail" required>
 
-            <label for="email">E-mail:</label>
+                <label for="novaSenha">Nova senha:</label>
+                <input type="password" id="novaSenha"
+                    placeholder="Mínimo de 6 caracteres"
+                    minlength="6" required>
 
-            <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Digite seu e-mail"
-                required
-            >
-
-            <label for="senha">Senha:</label>
-
-            <input
-                type="password"
-                id="senha"
-                name="senha"
-                placeholder="Digite sua senha"
-                required
-            >
-
-            <button type="submit">
-                Entrar
-            </button>
-
-            <p id="mensagemLogin" class="mensagem" role="status"></p>
-
-        </form>
-
-        <p class="link-login">
-            <a href="#" onclick="abrirRecuperacao(event)">
-                Esqueci minha senha
-            </a>
-        </p>
-
-        <p class="link-login">
-            Ainda não possui uma conta?
-            <a href="cadastro.html">Criar uma conta</a>
-        </p>
-
-    </section>
-
-</main>
-
-<footer>
-
-    <h2>TechStore</h2>
-
-    <p>
-        Peças, computadores e equipamentos de tecnologia.
-    </p>
-
-    <p>
-        Contato: contato@techstore.com
-    </p>
-
-    <p>
-        © 2026 TechStore - Todos os direitos reservados.
-    </p>
-
-</footer>
-
-<div
-    id="recuperacaoSenha"
-    class="recuperacao"
-    role="dialog"
-    aria-labelledby="titulo-recuperacao"
-    aria-modal="true"
->
-
-    <div class="recuperacao-caixa">
-
-        <h3 id="titulo-recuperacao">
-            Esqueci minha senha
-        </h3>
-
-        <p>
-            Digite o e-mail da sua conta e escolha uma nova senha.
-        </p>
-
-        <label for="emailRecuperacao">
-            E-mail:
-        </label>
-
-        <input
-            type="email"
-            id="emailRecuperacao"
-            placeholder="Digite seu e-mail"
-        >
-
-        <label for="novaSenha">
-            Nova senha:
-        </label>
-
-        <input
-            type="password"
-            id="novaSenha"
-            placeholder="Digite sua nova senha"
-        >
-
-        <div class="botoes-recuperacao">
-
-            <button
-                type="button"
-                onclick="fecharRecuperacao()"
-            >
-                Cancelar
-            </button>
-
-            <button
-                type="button"
-                onclick="recuperarSenha()"
-            >
-                Alterar senha
-            </button>
-
+                <div class="botoes-recuperacao">
+                    <button type="button" id="cancelarRecuperacao">Cancelar</button>
+                    <button type="submit">Alterar senha</button>
+                </div>
+                <p id="mensagemRecuperacao" class="mensagem"
+                    role="status" aria-live="polite"></p>
+            </form>
         </div>
-
-        <p
-            id="mensagemRecuperacao"
-            class="mensagem"
-            role="status"
-        ></p>
-
     </div>
 
-</div>
+    <script>
+        const formulario = document.getElementById("formLogin");
+        const mensagem = document.getElementById("mensagemLogin");
+        const modal = document.getElementById("recuperacaoSenha");
+        const formularioRecuperacao = document.getElementById("formRecuperacao");
+        const mensagemRecuperacao = document.getElementById("mensagemRecuperacao");
 
-<script>
+        function obterUsuarios() {
+            try {
+                const dados = JSON.parse(localStorage.getItem("usuarios") || "[]");
+                return Array.isArray(dados) ? dados : [];
+            } catch {
+                return [];
+            }
+        }
 
-    const formulario =
-        document.getElementById("formLogin");
+        function mostrarMensagem(elemento, texto, tipo) {
+            elemento.textContent = texto;
+            elemento.className = "mensagem " + tipo;
+        }
 
-    const mensagem =
-        document.getElementById("mensagemLogin");
+        formulario.addEventListener("submit", function(event) {
+            event.preventDefault();
 
-    formulario.addEventListener("submit", function(event) {
+            const email = document.getElementById("email").value.trim().toLowerCase();
+            const senha = document.getElementById("senha").value;
+            const usuarios = obterUsuarios();
 
-        event.preventDefault();
-
-        const email =
-            document
-                .getElementById("email")
-                .value
-                .trim()
-                .toLowerCase();
-
-        const senha =
-            document.getElementById("senha").value;
-
-        const usuarios =
-            JSON.parse(localStorage.getItem("usuarios")) || [];
-
-        const usuario =
-            usuarios.find(function(usuario) {
-                return usuario.email === email;
+            const usuario = usuarios.find(function(item) {
+                return item && item.email === email;
             });
 
-        if (!usuario) {
+            if (!usuario) {
+                mostrarMensagem(mensagem, "Conta não encontrada. Verifique o e-mail ou cadastre-se.", "erro");
+                return;
+            }
 
-            mensagem.textContent =
-                "Conta não encontrada. Verifique o e-mail.";
+            if (usuario.senha !== senha) {
+                mostrarMensagem(mensagem, "Senha incorreta. Tente novamente.", "erro");
+                return;
+            }
 
-            mensagem.className =
-                "mensagem erro";
+            try {
+                localStorage.setItem("usuarioLogado", JSON.stringify({
+                    nome: usuario.nome,
+                    email: usuario.email
+                }));
+            } catch {
+                mostrarMensagem(mensagem, "Não foi possível salvar o estado do login.", "erro");
+                return;
+            }
 
-            return;
+            mostrarMensagem(mensagem, "Login realizado com sucesso!", "sucesso");
+            formulario.reset();
+        });
+
+        function abrirRecuperacao() {
+            modal.classList.add("mostrar");
+            modal.setAttribute("aria-hidden", "false");
+            document.getElementById("emailRecuperacao").focus();
         }
 
-        if (usuario.senha !== senha) {
-
-            mensagem.textContent =
-                "Senha incorreta. Tente novamente.";
-
-            mensagem.className =
-                "mensagem erro";
-
-            return;
+        function fecharRecuperacao() {
+            modal.classList.remove("mostrar");
+            modal.setAttribute("aria-hidden", "true");
+            formularioRecuperacao.reset();
+            mensagemRecuperacao.textContent = "";
+            document.getElementById("linkRecuperacao").focus();
         }
 
-        mensagem.textContent =
-            "Login realizado com sucesso!";
+        document.getElementById("linkRecuperacao").addEventListener("click", function(event) {
+            event.preventDefault();
+            abrirRecuperacao();
+        });
 
-        mensagem.className =
-            "mensagem sucesso";
+        document.getElementById("cancelarRecuperacao").addEventListener("click", fecharRecuperacao);
 
-        formulario.reset();
+        modal.addEventListener("click", function(event) {
+            if (event.target === modal) fecharRecuperacao();
+        });
 
-    });
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" && modal.classList.contains("mostrar")) {
+                fecharRecuperacao();
+            }
+        });
 
-    function abrirRecuperacao(event) {
+        formularioRecuperacao.addEventListener("submit", function(event) {
+            event.preventDefault();
 
-        event.preventDefault();
+            const email = document.getElementById("emailRecuperacao").value.trim().toLowerCase();
+            const novaSenha = document.getElementById("novaSenha").value;
+            const usuarios = obterUsuarios();
 
-        document
-            .getElementById("recuperacaoSenha")
-            .classList.add("mostrar");
-
-    }
-
-    function fecharRecuperacao() {
-
-        document
-            .getElementById("recuperacaoSenha")
-            .classList.remove("mostrar");
-
-        document.getElementById("emailRecuperacao").value = "";
-        document.getElementById("novaSenha").value = "";
-        document.getElementById("mensagemRecuperacao").textContent = "";
-
-    }
-
-    function recuperarSenha() {
-
-        const email =
-            document
-                .getElementById("emailRecuperacao")
-                .value
-                .trim()
-                .toLowerCase();
-
-        const novaSenha =
-            document.getElementById("novaSenha").value;
-
-        const mensagemRecuperacao =
-            document.getElementById("mensagemRecuperacao");
-
-        const usuarios =
-            JSON.parse(localStorage.getItem("usuarios")) || [];
-
-        const usuario =
-            usuarios.find(function(usuario) {
-                return usuario.email === email;
+            const indice = usuarios.findIndex(function(item) {
+                return item && item.email === email;
             });
 
-        if (!usuario) {
+            if (indice === -1) {
+                mostrarMensagem(mensagemRecuperacao, "E-mail não encontrado.", "erro");
+                return;
+            }
 
-            mensagemRecuperacao.textContent =
-                "E-mail não encontrado.";
+            if (novaSenha.length < 6) {
+                mostrarMensagem(mensagemRecuperacao, "A senha precisa ter pelo menos 6 caracteres.", "erro");
+                return;
+            }
 
-            mensagemRecuperacao.className =
-                "mensagem erro";
+            usuarios[indice].senha = novaSenha;
 
-            return;
-        }
-
-        if (!novaSenha) {
-
-            mensagemRecuperacao.textContent =
-                "Digite uma nova senha.";
-
-            mensagemRecuperacao.className =
-                "mensagem erro";
-
-            return;
-        }
-
-        usuario.senha = novaSenha;
-
-        localStorage.setItem(
-            "usuarios",
-            JSON.stringify(usuarios)
-        );
-
-        mensagemRecuperacao.textContent =
-            "Senha alterada com sucesso!";
-
-        mensagemRecuperacao.className =
-            "mensagem sucesso";
-
-    }
-
-</script>
-```
-
+            try {
+                localStorage.setItem("usuarios", JSON.stringify(usuarios));
+                mostrarMensagem(mensagemRecuperacao, "Senha alterada! Você já pode entrar com a nova senha.", "sucesso");
+                formularioRecuperacao.reset();
+            } catch {
+                mostrarMensagem(mensagemRecuperacao, "Não foi possível salvar a nova senha.", "erro");
+            }
+        });
+    </script>
 </body>
-
 </html>

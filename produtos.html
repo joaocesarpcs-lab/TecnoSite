@@ -4,141 +4,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta name="description" content="Confira computadores, notebooks e peças de tecnologia na TechStore.">
     <title>Produtos - TechStore</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
     <header>
-
         <h1>TechStore</h1>
 
         <nav aria-label="Navegação principal">
             <a href="index.html">Início</a>
-            <a href="produtos.html">Produtos</a>
+            <a href="produtos.html" aria-current="page">Produtos</a>
+            <a href="carrinho.html">Carrinho</a>
             <a href="cadastro.html">Cadastro</a>
+            <a href="login.html">Entrar</a>
         </nav>
 
+        <form id="formPesquisa" role="search">
+            <label for="pesquisa">Pesquisar produtos</label>
+            <input
+                type="search"
+                id="pesquisa"
+                name="pesquisa"
+                placeholder="Pesquisar produtos..."
+            >
+            <button type="submit">Pesquisar</button>
+        </form>
     </header>
 
     <main>
-
         <section class="produtos" aria-labelledby="titulo-produtos">
-
             <h2 id="titulo-produtos">Nossos Produtos</h2>
 
-            <div class="cards">
+            <p id="resultadoPesquisa" role="status" aria-live="polite"></p>
 
-                <article class="card">
+            <div class="cards" id="listaProdutos">
 
-                    <img
-                        src="imagens/pc-gamer.jpg"
-                        alt="Computador Gamer completo"
-                    >
+                <article class="card" data-nome="computador gamer pc jogos estudos">
+                    <img src="imagens/pc-gamer.jpg" alt="Computador Gamer completo">
 
                     <h3>Computador Gamer</h3>
-
-                    <p>
-                        PC Gamer completo para jogos e estudos.
-                    </p>
-
+                    <p>PC Gamer completo para jogos e estudos.</p>
                     <strong>R$ 3.499,90</strong>
 
-                    <button
-                        class="comprar"
-                        type="button"
-                        onclick="comprar()"
-                    >
+                    <button class="comprar" type="button"
+                        data-produto="Computador Gamer" data-preco="3499.90">
                         Comprar
                     </button>
-
                 </article>
 
-                <article class="card">
-
-                    <img
-                        src="imagens/placa-video.jpg"
-                        alt="Placa de vídeo RTX 3050"
-                    >
+                <article class="card" data-nome="placa de video rtx 3050 pecas desempenho">
+                    <img src="imagens/placa-video.jpg" alt="Placa de vídeo RTX 3050">
 
                     <h3>Placa de Vídeo RTX 3050</h3>
-
-                    <p>
-                        Placa de vídeo para melhorar o desempenho.
-                    </p>
-
+                    <p>Placa de vídeo para melhorar o desempenho.</p>
                     <strong>R$ 1.299,90</strong>
 
-                    <button
-                        class="comprar"
-                        type="button"
-                        onclick="comprar()"
-                    >
+                    <button class="comprar" type="button"
+                        data-produto="Placa de Vídeo RTX 3050" data-preco="1299.90">
                         Comprar
                     </button>
-
                 </article>
 
-                <article class="card">
-
-                    <img
-                        src="imagens/note.webp"
-                        alt="Notebook para estudos e trabalho"
-                    >
+                <article class="card" data-nome="notebook computador portatil estudos trabalho">
+                    <img src="imagens/note.webp" alt="Notebook para estudos e trabalho">
 
                     <h3>Notebook</h3>
-
-                    <p>
-                        Notebook para estudos, trabalho e lazer.
-                    </p>
-
+                    <p>Notebook para estudos, trabalho e lazer.</p>
                     <strong>R$ 2.799,90</strong>
 
-                    <button
-                        class="comprar"
-                        type="button"
-                        onclick="comprar()"
-                    >
+                    <button class="comprar" type="button"
+                        data-produto="Notebook" data-preco="2799.90">
                         Comprar
                     </button>
-
                 </article>
 
             </div>
-
         </section>
-
     </main>
 
     <footer>
-
         <h2>TechStore</h2>
-
-        <p>
-            Peças, computadores e equipamentos de tecnologia.
-        </p>
-
-        <p>
-            Contato: contato@techstore.com
-        </p>
-
-        <p>
-            © 2026 TechStore - Todos os direitos reservados.
-        </p>
-
+        <p>Peças, computadores e equipamentos de tecnologia.</p>
+        <p>Contato: <a href="mailto:contato@techstore.com">contato@techstore.com</a></p>
+        <p>© 2026 TechStore - Todos os direitos reservados.</p>
     </footer>
 
-    <script>
+    <div id="notificacao" class="notificacao" role="status" aria-live="polite"></div>
 
-        function comprar() {
-            alert("Produto adicionado ao carrinho!");
+    <script>
+        const formularioPesquisa = document.getElementById("formPesquisa");
+        const campoPesquisa = document.getElementById("pesquisa");
+        const resultadoPesquisa = document.getElementById("resultadoPesquisa");
+        const produtos = document.querySelectorAll("#listaProdutos .card");
+        const notificacao = document.getElementById("notificacao");
+
+        let timerNotificacao;
+
+        function normalizar(texto) {
+            return texto.toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
         }
 
+        function pesquisarProdutos(termo) {
+            const busca = normalizar(termo.trim());
+            let encontrados = 0;
+
+            produtos.forEach(function(produto) {
+                const visivel = normalizar(produto.dataset.nome).includes(busca);
+                produto.hidden = !visivel;
+
+                if (visivel) encontrados++;
+            });
+
+            if (busca === "") {
+                resultadoPesquisa.textContent = "Todos os produtos disponíveis.";
+            } else if (encontrados === 0) {
+                resultadoPesquisa.textContent = "Nenhum produto encontrado para essa pesquisa.";
+            } else {
+                resultadoPesquisa.textContent = encontrados === 1
+                    ? "1 produto encontrado."
+                    : encontrados + " produtos encontrados.";
+            }
+        }
+
+        formularioPesquisa.addEventListener("submit", function(event) {
+            event.preventDefault();
+            pesquisarProdutos(campoPesquisa.value);
+
+            const parametros = new URLSearchParams(window.location.search);
+            parametros.set("pesquisa", campoPesquisa.value.trim());
+
+            history.replaceState(
+                null,
+                "",
+                window.location.pathname + "?" + parametros.toString()
+            );
+        });
+
+        const parametros = new URLSearchParams(window.location.search);
+        campoPesquisa.value = parametros.get("pesquisa") || "";
+        pesquisarProdutos(campoPesquisa.value);
+
+        document.querySelectorAll(".comprar").forEach(function(botao) {
+            botao.addEventListener("click", function() {
+                const nome = botao.dataset.produto;
+                const preco = Number(botao.dataset.preco);
+
+                if (!nome || !Number.isFinite(preco) || preco < 0) {
+                    mostrarNotificacao("Não foi possível identificar o produto e seu preço.");
+                    return;
+                }
+
+                try {
+                    let carrinho = [];
+
+                    try {
+                        const salvo = JSON.parse(localStorage.getItem("carrinho"));
+                        if (Array.isArray(salvo)) carrinho = salvo;
+                    } catch {
+                        carrinho = [];
+                    }
+
+                    // Converte produtos antigos, salvos apenas como texto.
+                    carrinho = carrinho.map(function(item) {
+                        if (typeof item === "string") {
+                            return { nome: item, preco: 0 };
+                        }
+                        return item;
+                    });
+
+                    carrinho.push({ nome: nome, preco: preco });
+
+                    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+                    mostrarNotificacao(nome + " adicionado ao carrinho!");
+                } catch (erro) {
+                    mostrarNotificacao("Não foi possível adicionar o produto. Tente novamente.");
+                }
+            });
+        });
+
+        function mostrarNotificacao(texto) {
+            notificacao.textContent = texto;
+            notificacao.classList.add("mostrar");
+
+            clearTimeout(timerNotificacao);
+
+            timerNotificacao = setTimeout(function() {
+                notificacao.classList.remove("mostrar");
+            }, 3000);
+        }
     </script>
 
 </body>
-
 </html>
