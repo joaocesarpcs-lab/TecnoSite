@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Conheça o produto Placa de Vídeo RTX 3050 na TechStore.">
+    <title>Placa de Vídeo RTX 3050 - TechStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>TechStore</h1>
+        <nav aria-label="Navegação principal">
+            <a href="index.html">Início</a>
+            <a href="produtos.html" aria-current="page">Produtos</a>
+            <a href="carrinho.html">Carrinho</a>
+            <a href="cadastro.html">Cadastro</a>
+            <a href="login.html">Entrar</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="produtos" aria-labelledby="titulo-produto">
+            <h2 id="titulo-produto">Placa de Vídeo RTX 3050</h2>
+            <article class="card produto-detalhe">
+                <img src="imagens/placa-video.jpg" alt="Placa de vídeo RTX 3050">
+                <h3>Sobre o produto</h3>
+                <p>A Placa de Vídeo RTX 3050 é um componente voltado ao processamento gráfico do computador.</p>
+                <p>Ela pode ser uma opção para quem deseja melhorar a parte gráfica do PC, especialmente em jogos e aplicações que utilizam recursos de vídeo.</p>
+                <p>Verifique a compatibilidade com a placa-mãe, a fonte de alimentação e o espaço disponível no gabinete antes de comprar.</p>
+                <h3>Informações</h3>
+                <ul>
+                    <li>Componente para computador de mesa</li>
+                    <li>Voltada ao processamento gráfico</li>
+                    <li>Preço anunciado: R$ 1.299,90</li>
+                </ul>
+                <p><strong>R$ 1.299,90</strong></p>
+                <button class="comprar" type="button"
+                    data-produto="Placa de Vídeo RTX 3050" data-preco="1299.90">
+                    Adicionar ao carrinho
+                </button>
+                <p><a class="btn" href="produtos.html">Voltar aos produtos</a></p>
+                <p id="notificacao" class="mensagem" role="status" aria-live="polite"></p>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <h2>TechStore</h2>
+        <p>Peças, computadores e equipamentos de tecnologia.</p>
+        <p>Contato: <a href="mailto:contato@techstore.com">contato@techstore.com</a></p>
+        <p>© 2026 TechStore - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const botaoComprar = document.querySelector(".comprar");
+        const notificacao = document.getElementById("notificacao");
+
+        botaoComprar.addEventListener("click", function() {
+            const nome = botaoComprar.dataset.produto;
+            const preco = Number(botaoComprar.dataset.preco);
+
+            try {
+                let carrinho = [];
+                const salvo = localStorage.getItem("carrinho");
+
+                if (salvo) {
+                    const itensSalvos = JSON.parse(salvo);
+                    if (Array.isArray(itensSalvos)) carrinho = itensSalvos;
+                }
+
+                carrinho = carrinho.map(function(item) {
+                    return typeof item === "string"
+                        ? { nome: item, preco: 0 }
+                        : item;
+                });
+
+                carrinho.push({ nome: nome, preco: preco });
+                localStorage.setItem("carrinho", JSON.stringify(carrinho));
+                notificacao.textContent = nome + " adicionado ao carrinho!";
+                notificacao.classList.add("sucesso");
+            } catch (erro) {
+                notificacao.textContent = "Não foi possível adicionar ao carrinho. Tente novamente.";
+                notificacao.classList.add("erro");
+            }
+        });
+    </script>
+</body>
+</html>

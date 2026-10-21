@@ -757,3 +757,87 @@ footer p {
         transition-duration: 0.01ms !important;
     }
 }
+
+/* PARTE DAS ABAS INDIVIDUAIS DOS PRDUTOS */
+.produto-detalhe {
+    width: calc(100% - 40px);
+    max-width: 760px;
+    min-height: 0;
+    margin: 0 auto;
+    padding: 32px;
+    text-align: center;
+    align-items: stretch;
+}
+
+
+.produto-detalhe img {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: 280px;
+    margin: 0 auto 24px;
+    object-fit: contain;
+}
+
+
+.produto-detalhe h3 {
+    min-height: 0;
+    margin: 24px 0 12px;
+    text-align: center;
+}
+
+
+.produto-detalhe p {
+    max-width: 650px;
+    margin: 0 auto 16px;
+    text-align: left;
+}
+
+
+.produto-detalhe strong {
+    display: block;
+    margin-top: 12px;
+    font-size: 24px;
+    text-align: center;
+}
+
+
+.produto-detalhe ul {
+    max-width: 650px;
+    margin: 0 auto 24px;
+    padding-left: 24px;
+    text-align: left;
+}
+
+.produto-detalhe li {
+    margin-bottom: 10px;
+}
+
+
+.produto-detalhe .comprar {
+    width: 100%;
+    max-width: 320px;
+    margin: 16px auto;
+}
+
+.produto-detalhe .btn {
+    margin: 8px auto;
+}
+
+
+.produto-detalhe .mensagem {
+    margin: 12px auto;
+    text-align: center;
+}
+
+
+@media (max-width: 600px) {
+    .produto-detalhe {
+        width: calc(100% - 24px);
+        padding: 20px;
+    }
+
+    .produto-detalhe img {
+        height: 220px;
+    }
+}

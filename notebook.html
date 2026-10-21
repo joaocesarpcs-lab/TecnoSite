@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Conheça o produto Notebook na TechStore.">
+    <title>Notebook - TechStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>TechStore</h1>
+        <nav aria-label="Navegação principal">
+            <a href="index.html">Início</a>
+            <a href="produtos.html" aria-current="page">Produtos</a>
+            <a href="carrinho.html">Carrinho</a>
+            <a href="cadastro.html">Cadastro</a>
+            <a href="login.html">Entrar</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="produtos" aria-labelledby="titulo-produto">
+            <h2 id="titulo-produto">Notebook</h2>
+            <article class="card produto-detalhe">
+                <img src="imagens/note.webp" alt="Notebook para estudos e trabalho">
+                <h3>Sobre o produto</h3>
+                <p>O Notebook é uma opção prática para quem precisa de um computador portátil para estudar, trabalhar e aproveitar momentos de lazer.</p>
+                <p>Por ser portátil, ele pode ser levado entre diferentes ambientes, como casa, faculdade ou trabalho.</p>
+                <p>Consulte a loja para confirmar as especificações técnicas do modelo, como memória, armazenamento, processador e tamanho da tela.</p>
+                <h3>Informações</h3>
+                <ul>
+                    <li>Computador portátil</li>
+                    <li>Indicado para estudos e trabalho</li>
+                    <li>Preço anunciado: R$ 2.799,90</li>
+                </ul>
+                <p><strong>R$ 2.799,90</strong></p>
+                <button class="comprar" type="button"
+                    data-produto="Notebook" data-preco="2799.90">
+                    Adicionar ao carrinho
+                </button>
+                <p><a class="btn" href="produtos.html">Voltar aos produtos</a></p>
+                <p id="notificacao" class="mensagem" role="status" aria-live="polite"></p>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <h2>TechStore</h2>
+        <p>Peças, computadores e equipamentos de tecnologia.</p>
+        <p>Contato: <a href="mailto:contato@techstore.com">contato@techstore.com</a></p>
+        <p>© 2026 TechStore - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const botaoComprar = document.querySelector(".comprar");
+        const notificacao = document.getElementById("notificacao");
+
+        botaoComprar.addEventListener("click", function() {
+            const nome = botaoComprar.dataset.produto;
+            const preco = Number(botaoComprar.dataset.preco);
+
+            try {
+                let carrinho = [];
+                const salvo = localStorage.getItem("carrinho");
+
+                if (salvo) {
+                    const itensSalvos = JSON.parse(salvo);
+                    if (Array.isArray(itensSalvos)) carrinho = itensSalvos;
+                }
+
+                carrinho = carrinho.map(function(item) {
+                    return typeof item === "string"
+                        ? { nome: item, preco: 0 }
+                        : item;
+                });
+
+                carrinho.push({ nome: nome, preco: preco });
+                localStorage.setItem("carrinho", JSON.stringify(carrinho));
+                notificacao.textContent = nome + " adicionado ao carrinho!";
+                notificacao.classList.add("sucesso");
+            } catch (erro) {
+                notificacao.textContent = "Não foi possível adicionar ao carrinho. Tente novamente.";
+                notificacao.classList.add("erro");
+            }
+        });
+    </script>
+</body>
+</html>
