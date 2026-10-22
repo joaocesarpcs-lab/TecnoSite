@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <a class="pular-conteudo" href="#conteudo-principal">
+        Pular para o conteúdo principal
+    </a>
+
     <header>
         <h1>TechStore</h1>
         <nav aria-label="Navegação principal">
@@ -18,10 +22,12 @@
         </nav>
     </header>
 
-    <main class="pagina-carrinho">
+    <main id="conteudo-principal" class="pagina-carrinho" tabindex="-1">
         <section class="conteudo-carrinho" aria-labelledby="titulo-carrinho">
             <h2 id="titulo-carrinho">Meu carrinho</h2>
-            <p class="subtitulo-carrinho">Confira os produtos que você adicionou.</p>
+            <p class="subtitulo-carrinho">
+                Confira os produtos que você adicionou.
+            </p>
 
             <p id="mensagemCarrinho" role="status" aria-live="polite"></p>
             <div id="listaCarrinho" class="lista-carrinho"></div>
@@ -31,7 +37,10 @@
                 <p>Total: <strong id="totalCarrinho">R$ 0,00</strong></p>
 
                 <div class="acoes-carrinho">
-                    <a href="produtos.html" class="btn-continuar">Continuar comprando</a>
+                    <a href="produtos.html" class="btn-continuar">
+                        Continuar comprando
+                    </a>
+
                     <button type="button" class="limpar-carrinho" id="botaoLimpar">
                         Limpar carrinho
                     </button>
@@ -68,6 +77,37 @@
                 style: "currency",
                 currency: "BRL"
             });
+        }
+
+        // Identifica a página do produto pelo nome.
+        function obterLinkProduto(nome) {
+            const nomeNormalizado = String(nome || "")
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+
+            if (nomeNormalizado.includes("notebook")) {
+                return "notebook.html";
+            }
+
+            if (
+                nomeNormalizado.includes("rtx 3050") ||
+                (
+                    nomeNormalizado.includes("placa") &&
+                    nomeNormalizado.includes("video")
+                )
+            ) {
+                return "placa-video-rtx-3050.html";
+            }
+
+            if (
+                nomeNormalizado.includes("computador") ||
+                nomeNormalizado.includes("pc gamer")
+            ) {
+                return "computador-gamer.html";
+            }
+
+            return "produtos.html";
         }
 
         function mostrarCarrinho() {
@@ -116,9 +156,17 @@
                 informacoes.className = "informacoes-produto";
 
                 const nome = document.createElement("h3");
-                nome.textContent = typeof produto === "string"
+
+                const nomeProduto = typeof produto === "string"
                     ? produto
                     : produto.nome || "Produto";
+
+                // Transforma o nome em um link clicável.
+                const linkProduto = document.createElement("a");
+                linkProduto.textContent = nomeProduto;
+                linkProduto.href = obterLinkProduto(nomeProduto);
+
+                nome.appendChild(linkProduto);
 
                 const descricao = document.createElement("p");
                 const preco = Number(produto && produto.preco);
@@ -135,7 +183,10 @@
                 remover.type = "button";
                 remover.className = "remover-produto";
                 remover.textContent = "Remover";
-                remover.setAttribute("aria-label", "Remover " + nome.textContent + " do carrinho");
+                remover.setAttribute(
+                    "aria-label",
+                    "Remover " + nomeProduto + " do carrinho"
+                );
 
                 remover.addEventListener("click", function() {
                     const carrinhoAtual = obterCarrinho();
@@ -174,3 +225,5 @@
     </script>
 </body>
 </html>
+
+
