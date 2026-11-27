@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - TechStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a class="pular-conteudo" href="#conteudo-principal">
+        Pular para o conteúdo principal
+    </a>
+
+    <header>
+        <h1>TechStore</h1>
+        <nav aria-label="Navegação principal">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="cadastro.html" aria-current="page">Cadastro</a>
+            <a href="login.html">Entrar</a>
+            <a href="carrinho.html">Carrinho</a>
+        </nav>
+    </header>
+
+    <main id="conteudo-principal" tabindex="-1">
+        <section class="cadastro" aria-labelledby="titulo-cadastro">
+            <h2 id="titulo-cadastro">Crie sua conta</h2>
+            <p class="texto-cadastro">
+                Cadastre-se para ter acesso à TechStore.
+            </p>
+
+            <p class="legenda-obrigatorios">
+                Os campos marcados com <span class="asterisco-obrigatorio">*</span>
+                são obrigatórios.
+            </p>
+
+            <form id="formCadastro">
+                <label for="nome">
+                    Nome completo:
+                    <span class="asterisco-obrigatorio" aria-hidden="true">*</span>
+                    <span class="texto-somente-leitor"> (obrigatório)</span>
+                </label>
+                <input
+                    type="text"
+                    id="nome"
+                    name="nome"
+                    placeholder="Digite seu nome"
+                    autocomplete="name"
+                    minlength="3"
+                    required
+                >
+
+                <label for="email">
+                    E-mail:
+                    <span class="asterisco-obrigatorio" aria-hidden="true">*</span>
+                    <span class="texto-somente-leitor"> (obrigatório)</span>
+                </label>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Digite seu e-mail"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="telefone">Telefone (opcional):</label>
+                <input
+                    type="tel"
+                    id="telefone"
+                    name="telefone"
+                    placeholder="(00) 00000-0000"
+                    autocomplete="tel"
+                    maxlength="20"
+                >
+
+                <label for="senha">
+                    Senha:
+                    <span class="asterisco-obrigatorio" aria-hidden="true">*</span>
+                    <span class="texto-somente-leitor"> (obrigatório)</span>
+                </label>
+                <input
+                    type="password"
+                    id="senha"
+                    name="senha"
+                    placeholder="Mínimo de 6 caracteres"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
+
+                <label for="confirmar-senha">
+                    Confirmar senha:
+                    <span class="asterisco-obrigatorio" aria-hidden="true">*</span>
+                    <span class="texto-somente-leitor"> (obrigatório)</span>
+                </label>
+                <input
+                    type="password"
+                    id="confirmar-senha"
+                    name="confirmar-senha"
+                    placeholder="Digite a senha novamente"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required
+                >
+
+                <button type="submit">Cadastrar</button>
+
+                <p
+                    id="mensagemCadastro"
+                    class="mensagem"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+            </form>
+
+            <p class="link-login">
+                Já possui uma conta?
+                <a href="login.html">Entrar na sua conta</a>
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <h2>TechStore</h2>
+        <p>Peças, computadores e equipamentos de tecnologia.</p>
+        <p>Contato: <a href="mailto:contato@techstore.com">contato@techstore.com</a></p>
+        <p>© 2026 TechStore - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const formulario = document.getElementById("formCadastro");
+        const mensagem = document.getElementById("mensagemCadastro");
+
+        formulario.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim().toLowerCase();
+            const senha = document.getElementById("senha").value;
+            const confirmarSenha = document.getElementById("confirmar-senha").value;
+
+            function mostrarMensagem(texto, tipo) {
+                mensagem.textContent = texto;
+                mensagem.className = "mensagem " + tipo;
+            }
+
+            async function lerRespostaApi(resposta) {
+                const tipo = resposta.headers.get("content-type") || "";
+                const texto = await resposta.text();
+                if (!tipo.includes("application/json") || !texto.trim()) {
+                    throw new Error("A API do cadastro não respondeu. Inicie o site com npm start e abra http://localhost:3000.");
+                }
+                try {
+                    return JSON.parse(texto);
+                } catch {
+                    throw new Error("A API do cadastro retornou uma resposta inválida. Reinicie o servidor do site.");
+                }
+            }
+
+            if (nome.length < 3) {
+                mostrarMensagem("Digite seu nome completo.", "erro");
+                return;
+            }
+
+            if (senha.length < 6) {
+                mostrarMensagem("A senha precisa ter pelo menos 6 caracteres.", "erro");
+                return;
+            }
+
+            if (senha !== confirmarSenha) {
+                mostrarMensagem("As senhas não são iguais!", "erro");
+                return;
+            }
+
+            try {
+                const resposta = await fetch("/api/customers", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        name: nome,
+                        email: email,
+                        password: senha,
+                        phone: document.getElementById("telefone").value.trim()
+                    })
+                });
+                const resultado = await lerRespostaApi(resposta);
+                if (!resposta.ok) throw new Error(resultado.error || "Não foi possível concluir o cadastro.");
+                mostrarMensagem("Cadastro realizado com sucesso! Você já pode entrar.", "sucesso");
+                formulario.reset();
+            } catch (erro) {
+                mostrarMensagem(erro instanceof TypeError
+                    ? "Não foi possível conectar ao servidor. Inicie o site pelo servidor local e confira o PostgreSQL."
+                    : erro.message, "erro");
+            }
+        });
+    </script>
+</body>
+</html>

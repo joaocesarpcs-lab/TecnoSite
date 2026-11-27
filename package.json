@@ -1,0 +1,12 @@
+{
+  "name": "technostore-postgres",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TechStore site with a PostgreSQL API",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}

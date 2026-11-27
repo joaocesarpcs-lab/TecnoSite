@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Encontre computadores, peças e equipamentos de tecnologia na TechStore.">
+    <title>TechStore - Tecnologia e Informática</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <a class="pular-conteudo" href="#conteudo-principal">
+        Pular para o conteúdo principal
+    </a>
+
+    <header>
+        <h1>TechStore</h1>
+
+        <nav aria-label="Navegação principal">
+            <a href="index.html" aria-current="page">Início</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="carrinho.html">Carrinho</a>
+            <a href="login.html">Entrar</a>
+        </nav>
+
+        <form id="formPesquisa" role="search">
+            <label for="pesquisa">Pesquisar produtos</label>
+            <input
+                type="search"
+                id="pesquisa"
+                name="pesquisa"
+                placeholder="Pesquisar..."
+            >
+            <button type="submit">Pesquisar</button>
+        </form>
+    </header>
+
+    <main id="conteudo-principal" tabindex="-1">
+        <section class="hero" aria-labelledby="titulo-principal">
+            <h2 id="titulo-principal">Tecnologia para todos os momentos</h2>
+
+            <p>
+                Encontre peças, computadores e equipamentos
+                novos e seminovos em um só lugar.
+            </p>
+
+            <a href="cadastro.html" class="btn">Cadastre-se</a>
+        </section>
+
+        <section class="produtos" aria-labelledby="produtos-destaque">
+            <h2 id="produtos-destaque">Produtos em destaque</h2>
+
+            <div class="cards">
+
+                <article class="card">
+                    <img
+                        src="imagens/pc-gamer.jpg"
+                        alt="Computador Gamer com iluminação colorida"
+                        loading="lazy"
+                    >
+
+                    <h3>Computador Gamer</h3>
+                    <p>PC Gamer completo para jogos e estudos.</p>
+                    <strong>R$ 3.499,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        data-produto="Computador Gamer"
+                        data-preco="3499.90"
+                    >
+                        Comprar
+                    </button>
+                    <a class="btn btn-secundario" href="computador-gamer.html">
+                        Ver produto
+                    </a>
+                </article>
+
+                <article class="card">
+                    <img
+                        src="imagens/placa-video.jpg"
+                        alt="Placa de vídeo RTX 3050"
+                        loading="lazy"
+                    >
+
+                    <h3>Placa de Vídeo RTX 3050</h3>
+                    <p>Placa de vídeo para melhorar o desempenho.</p>
+                    <strong>R$ 1.299,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        data-produto="Placa de Vídeo RTX 3050"
+                        data-preco="1299.90"
+                    >
+                        Comprar
+                    </button>
+                    <a class="btn btn-secundario" href="placa-video-rtx-3050.html">
+                        Ver produto
+                    </a>
+                </article>
+
+                <article class="card">
+                    <img
+                        src="imagens/note.webp"
+                        alt="Notebook para estudos e trabalho"
+                        loading="lazy"
+                    >
+
+                    <h3>Notebook</h3>
+                    <p>Notebook para estudos, trabalho e lazer.</p>
+                    <strong>R$ 2.799,90</strong>
+
+                    <button
+                        class="comprar"
+                        type="button"
+                        data-produto="Notebook"
+                        data-preco="2799.90"
+                    >
+                        Comprar
+                    </button>
+                    <a class="btn btn-secundario" href="notebook.html">
+                        Ver produto
+                    </a>
+                </article>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <h2>TechStore</h2>
+        <p>Peças, computadores e equipamentos de tecnologia.</p>
+        <p>Contato: <a href="mailto:contato@techstore.com">contato@techstore.com</a></p>
+        <p>© 2026 TechStore - Todos os direitos reservados.</p>
+    </footer>
+
+    <div
+        id="notificacao"
+        class="notificacao"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+    <script>
+        const notificacao = document.getElementById("notificacao");
+        let temporizadorNotificacao;
+
+        function mostrarNotificacao(texto) {
+            notificacao.textContent = texto;
+            notificacao.classList.add("mostrar");
+
+            clearTimeout(temporizadorNotificacao);
+
+            temporizadorNotificacao = setTimeout(function() {
+                notificacao.classList.remove("mostrar");
+            }, 2500);
+        }
+
+        document.querySelectorAll(".comprar").forEach(function(botao) {
+            botao.addEventListener("click", function() {
+                const nome = botao.dataset.produto;
+                const preco = Number(botao.dataset.preco);
+
+                try {
+                    let carrinho = [];
+
+                    try {
+                        const salvo = JSON.parse(localStorage.getItem("carrinho"));
+                        if (Array.isArray(salvo)) carrinho = salvo;
+                    } catch {
+                        carrinho = [];
+                    }
+
+                    carrinho = carrinho.map(function(item) {
+                        return typeof item === "string"
+                            ? { nome: item, preco: 0 }
+                            : item;
+                    });
+
+                    const idProduto = Number(botao.dataset.productId) || null;
+                    if (!idProduto) {
+                        mostrarNotificacao("Não foi possível carregar o produto do banco. Confira a conexão com o PostgreSQL.");
+                        return;
+                    }
+                    const itemExistente = carrinho.find(function(item) {
+                        return item && item.id_produto === idProduto && idProduto;
+                    });
+                    const estoque = Number(botao.dataset.estoque) || 0;
+                    const quantidadeNoCarrinho = Number(itemExistente && itemExistente.quantidade) || 0;
+                    if (quantidadeNoCarrinho + 1 > estoque) {
+                        mostrarNotificacao("Estoque disponível para este produto: " + estoque + " unidade(s).");
+                        return;
+                    }
+                    if (itemExistente) {
+                        itemExistente.quantidade = quantidadeNoCarrinho + 1;
+                    } else {
+                        carrinho.push({ id_produto: idProduto, nome: nome, preco: preco, quantidade: 1 });
+                    }
+
+                    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+                    mostrarNotificacao(nome + " adicionado ao carrinho!");
+                } catch {
+                    mostrarNotificacao("Não foi possível adicionar ao carrinho.");
+                }
+            });
+        });
+
+        document.getElementById("formPesquisa").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const termo = document.getElementById("pesquisa").value.trim();
+
+            window.location.href = "produtos.html?pesquisa=" +
+                encodeURIComponent(termo);
+        });
+    </script>
+
+    <script src="storefront.js" defer></script>
+</body>
+</html>

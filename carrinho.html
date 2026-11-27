@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Carrinho - TechStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a class="pular-conteudo" href="#conteudo-principal">
+        Pular para o conteúdo principal
+    </a>
+
+    <header>
+        <h1>TechStore</h1>
+        <nav aria-label="Navegação principal">
+            <a href="index.html">Início</a>
+            <a href="produtos.html">Produtos</a>
+            <a href="carrinho.html" aria-current="page">Carrinho</a>
+            <a href="cadastro.html">Cadastro</a>
+            <a href="login.html">Entrar</a>
+        </nav>
+    </header>
+
+    <main id="conteudo-principal" class="pagina-carrinho" tabindex="-1">
+        <section class="conteudo-carrinho" aria-labelledby="titulo-carrinho">
+            <h2 id="titulo-carrinho">Meu carrinho</h2>
+            <p class="subtitulo-carrinho">
+                Confira os produtos que você adicionou.
+            </p>
+
+            <p id="mensagemCarrinho" role="status" aria-live="polite"></p>
+            <div id="listaCarrinho" class="lista-carrinho"></div>
+
+            <div class="resumo-carrinho">
+                <p id="quantidadeProdutos">0 produtos no carrinho</p>
+                <p>Total: <strong id="totalCarrinho">R$ 0,00</strong></p>
+
+                <div class="acoes-carrinho">
+                    <a href="produtos.html" class="btn-continuar">
+                        Continuar comprando
+                    </a>
+
+                    <button type="button" class="limpar-carrinho" id="botaoLimpar">
+                        Limpar carrinho
+                    </button>
+                    <button type="button" class="finalizar-pedido" id="botaoFinalizarPedido">
+                        Finalizar pedido
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <h2>TechStore</h2>
+        <p>Peças, computadores e equipamentos de tecnologia.</p>
+        <p>Contato: contato@techstore.com</p>
+        <p>© 2026 TechStore - Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const lista = document.getElementById("listaCarrinho");
+        const quantidade = document.getElementById("quantidadeProdutos");
+        const total = document.getElementById("totalCarrinho");
+        const mensagem = document.getElementById("mensagemCarrinho");
+        const botaoLimpar = document.getElementById("botaoLimpar");
+        const botaoFinalizar = document.getElementById("botaoFinalizarPedido");
+
+        function obterCarrinho() {
+            try {
+                const dados = JSON.parse(localStorage.getItem("carrinho"));
+                return Array.isArray(dados) ? dados : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function formatarPreco(valor) {
+            return Number(valor).toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+        }
+
+        async function lerRespostaApi(resposta) {
+            const tipo = resposta.headers.get("content-type") || "";
+            const texto = await resposta.text();
+            if (!tipo.includes("application/json") || !texto.trim()) {
+                throw new Error("A API de pedidos não respondeu. Inicie o site com npm start e abra http://localhost:3000.");
+            }
+            try {
+                return JSON.parse(texto);
+            } catch {
+                throw new Error("A API de pedidos retornou uma resposta inválida. Reinicie o servidor do site.");
+            }
+        }
+
+        // Identifica a página do produto pelo nome.
+        function obterLinkProduto(nome) {
+            const nomeNormalizado = String(nome || "")
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "");
+
+            if (nomeNormalizado.includes("notebook")) {
+                return "notebook.html";
+            }
+
+            if (
+                nomeNormalizado.includes("rtx 3050") ||
+                (
+                    nomeNormalizado.includes("placa") &&
+                    nomeNormalizado.includes("video")
+                )
+            ) {
+                return "placa-video-rtx-3050.html";
+            }
+
+            if (
+                nomeNormalizado.includes("computador") ||
+                nomeNormalizado.includes("pc gamer")
+            ) {
+                return "computador-gamer.html";
+            }
+
+            return "produtos.html";
+        }
+
+        function mostrarCarrinho() {
+            const carrinho = obterCarrinho();
+            lista.replaceChildren();
+
+            const totalUnidades = carrinho.reduce(function(soma, produto) {
+                return soma + (produto && typeof produto === "object"
+                    ? Math.max(1, Number(produto.quantidade) || 1)
+                    : 1);
+            }, 0);
+            quantidade.textContent = totalUnidades +
+                (totalUnidades === 1
+                    ? " produto no carrinho"
+                    : " produtos no carrinho");
+
+            const valorTotal = carrinho.reduce(function(soma, produto) {
+                if (!produto || typeof produto !== "object") return soma;
+
+                const preco = Number(produto.preco);
+                const unidades = Math.max(1, Number(produto.quantidade) || 1);
+                return soma + (Number.isFinite(preco) && preco >= 0 ? preco * unidades : 0);
+            }, 0);
+
+            total.textContent = formatarPreco(valorTotal);
+
+            if (carrinho.length === 0) {
+                const vazio = document.createElement("div");
+                vazio.className = "carrinho-vazio";
+
+                const titulo = document.createElement("h3");
+                titulo.textContent = "Seu carrinho está vazio";
+
+                const texto = document.createElement("p");
+                texto.textContent = "Explore nossos produtos e encontre o que você precisa.";
+
+                const link = document.createElement("a");
+                link.href = "produtos.html";
+                link.className = "btn-continuar";
+                link.textContent = "Ver produtos";
+
+                vazio.append(titulo, texto, link);
+                lista.appendChild(vazio);
+                return;
+            }
+
+            carrinho.forEach(function(produto, indice) {
+                const item = document.createElement("article");
+                item.className = "produto-carrinho";
+
+                const informacoes = document.createElement("div");
+                informacoes.className = "informacoes-produto";
+
+                const nome = document.createElement("h3");
+
+                const nomeProduto = typeof produto === "string"
+                    ? produto
+                    : produto.nome || "Produto";
+
+                // Transforma o nome em um link clicável.
+                const linkProduto = document.createElement("a");
+                linkProduto.textContent = nomeProduto;
+                linkProduto.href = obterLinkProduto(nomeProduto);
+
+                nome.appendChild(linkProduto);
+
+                const descricao = document.createElement("p");
+                const preco = Number(produto && produto.preco);
+                const unidades = produto && typeof produto === "object"
+                    ? Math.max(1, Number(produto.quantidade) || 1)
+                    : 1;
+
+                descricao.textContent =
+                    produto && typeof produto === "object" &&
+                    Number.isFinite(preco) && preco >= 0
+                        ? formatarPreco(preco * unidades) + " · Quantidade: " + unidades
+                        : "Preço não informado";
+
+                informacoes.append(nome, descricao);
+
+                const remover = document.createElement("button");
+                remover.type = "button";
+                remover.className = "remover-produto";
+                remover.textContent = "Remover";
+                remover.setAttribute(
+                    "aria-label",
+                    "Remover " + nomeProduto + " do carrinho"
+                );
+
+                remover.addEventListener("click", function() {
+                    const carrinhoAtual = obterCarrinho();
+                    carrinhoAtual.splice(indice, 1);
+                    localStorage.setItem("carrinho", JSON.stringify(carrinhoAtual));
+
+                    mensagem.textContent = "Produto removido do carrinho.";
+                    mostrarCarrinho();
+                });
+
+                item.append(informacoes, remover);
+                lista.appendChild(item);
+            });
+        }
+
+        function limparCarrinho() {
+            const carrinho = obterCarrinho();
+
+            if (carrinho.length === 0) {
+                mensagem.textContent = "O carrinho já está vazio.";
+                return;
+            }
+
+            localStorage.removeItem("carrinho");
+            mensagem.textContent = "Carrinho limpo com sucesso.";
+            mostrarCarrinho();
+        }
+
+        botaoLimpar.addEventListener("click", limparCarrinho);
+
+        botaoFinalizar.addEventListener("click", async function() {
+            const itens = obterCarrinho();
+            if (!itens.length) {
+                mensagem.textContent = "Adicione produtos antes de finalizar o pedido.";
+                return;
+            }
+            const pedido = itens.map(function(item) {
+                return {
+                    productId: Number(item && item.id_produto),
+                    quantity: Math.max(1, Number(item && item.quantidade) || 1)
+                };
+            });
+            if (pedido.some(function(item) { return !Number.isSafeInteger(item.productId) || item.productId < 1; })) {
+                mensagem.textContent = "Remova os itens antigos do carrinho e adicione-os novamente para concluir a compra.";
+                return;
+            }
+            botaoFinalizar.disabled = true;
+            try {
+                const resposta = await fetch("/api/orders", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ items: pedido })
+                });
+                const resultado = await lerRespostaApi(resposta);
+                if (!resposta.ok) throw new Error(resultado.error || "Não foi possível criar o pedido.");
+                localStorage.removeItem("carrinho");
+                mensagem.textContent = "Pedido #" + resultado.order.id_pedido + " criado com sucesso. Total: " + formatarPreco(resultado.order.valor_total) + ".";
+                mostrarCarrinho();
+            } catch (erro) {
+                mensagem.textContent = erro instanceof TypeError
+                    ? "Não foi possível conectar ao servidor. Inicie o site pelo servidor local."
+                    : erro.message;
+            } finally {
+                botaoFinalizar.disabled = false;
+            }
+        });
+
+        window.addEventListener("storage", function(evento) {
+            if (evento.key === "carrinho") mostrarCarrinho();
+        });
+
+        mostrarCarrinho();
+    </script>
+</body>
+</html>
+
+
